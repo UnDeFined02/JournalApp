@@ -14,7 +14,7 @@
 	<name>Journal App</name>
 	<description>E2EE Journal App</description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>11</java.version>
 		<sonar.organization>undefined02</sonar.organization>
 	</properties>
 	<dependencies>
