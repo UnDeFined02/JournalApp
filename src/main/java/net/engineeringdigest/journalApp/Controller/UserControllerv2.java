@@ -1,7 +1,11 @@
 package net.engineeringdigest.journalApp.Controller;
 
 import net.engineeringdigest.journalApp.Service.JournalService;
+import net.engineeringdigest.journalApp.Service.QuoteService;
 import net.engineeringdigest.journalApp.Service.UserService;
+import net.engineeringdigest.journalApp.Service.WeatherService;
+import net.engineeringdigest.journalApp.api.response.QuoteResponse;
+import net.engineeringdigest.journalApp.api.response.WeatherResponse;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repositories.UserRepo;
@@ -28,10 +32,32 @@ public class UserControllerv2 {
     private UserService userService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private WeatherService weatherService;
+    @Autowired
+    private QuoteService quoteService;
 
-    @GetMapping
-    public List<User> getalluser(){
-        return userService.getAll();
+    @GetMapping("/weather")
+   public ResponseEntity<?> greeting(){
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getweather("Mumbai");
+        String greeting="";
+        if(weatherResponse!=null){
+            greeting=", Weather feels like "+weatherResponse.getCurrent().getFeelslike();
+        }
+
+        return new ResponseEntity<>("Hi "+authentication.getName()+greeting,HttpStatus.OK);
+    }
+    @GetMapping("/quote")
+    public ResponseEntity<?> quote(){
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        QuoteResponse quoteResponse = quoteService.getquote();
+        String quote="";
+        if(quoteResponse!=null){
+            quote=", The Quote of the day is "+quoteResponse.getQuote();
+        }
+        return new ResponseEntity<>("Hi "+authentication.getName()+quote,HttpStatus.OK);
+
     }
 
 
